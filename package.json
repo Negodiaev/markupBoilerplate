@@ -1,0 +1,36 @@
+{
+  "name": "lintersgulp",
+  "version": "1.0.0",
+  "description": "Gulp boilerplate for Frontend dev",
+  "main": "index.js",
+  "dependencies": {
+    "imagemin-pngquant": "^5.0.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^6.7.7",
+    "browser-sync": "^2.18.2",
+    "cssnext": "^1.8.4",
+    "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-csscomb": "^3.0.8",
+    "gulp-csslint": "^1.0.0",
+    "gulp-csso": "^2.0.0",
+    "gulp-htmlhint": "^0.3.1",
+    "gulp-imagemin": "^3.1.1",
+    "gulp-postcss": "^6.4.0",
+    "gulp-rigger": "^0.5.8",
+    "gulp-rimraf": "^0.2.1",
+    "gulp-sass": "^2.3.2",
+    "gulp-sourcemaps": "^1.9.1",
+    "gulp-stylelint": "^3.9.0",
+    "gulp-uglify": "^2.0.0",
+    "gulp-uncss": "^1.0.6",
+    "gulp-watch": "^4.3.11",
+    "pump": "^1.0.1",
+    "stylelint-config-standard": "^16.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Alex",
+  "license": "ISC"
+}

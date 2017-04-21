@@ -1,0 +1,25 @@
+//Typography
+$root-font-size: 16px; //font-size for html element
+$font-size: 1rem;      //font-size for body element
+$line-height: 1.4;
+$font-family: 'Raleway', Helvetica, sans-serif;
+
+//Default colors
+$color-white: #fff;
+$color-black: #000;
+$color-light-gray: #d7d7d7;
+
+//Main colors
+$color-primary: #f00;
+$color-secondary: #00f;
+$color-text: #333;
+$color-background: #f7f7f7;
+$color-link: #f00;
+$color-link-hover: #00f;
+
+//Custom colors
+$color-header-background: $color-light-gray;
+$color-footer-background: $color-light-gray;
+
+//layout
+$footer-height: 5rem;
