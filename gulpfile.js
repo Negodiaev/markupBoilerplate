@@ -1,26 +1,27 @@
 'use strict'
 
-const gulp = require('gulp'),
-			htmlhint = require("gulp-htmlhint"),
-			scss = require('gulp-sass'),
-			sourcemaps = require('gulp-sourcemaps'),
-			postcss = require('gulp-postcss'),
-			autoprefixer = require('autoprefixer'),
-			cssnext = require('cssnext'),
-			stylelint = require('gulp-stylelint'),
-			csslint = require('gulp-csslint'),
-			uncss = require('gulp-uncss'),
-			csscomb = require('gulp-csscomb'),
-			csso = require('gulp-csso'),
-			eslint = require('gulp-eslint'),
-			uglify = require('gulp-uglify'),
-			pump = require('pump'),
-			imagemin = require('gulp-imagemin'),
-			pngquant = require('imagemin-pngquant'),
-			rigger = require('gulp-rigger'),
-			watch = require('gulp-watch'),
-			rimraf = require('rimraf'),
-			browserSync = require('browser-sync').create();
+const gulp = require('gulp');
+const htmlhint = require('gulp-htmlhint');
+const scss = require('gulp-sass');
+const sourcemaps = require('gulp-sourcemaps');
+const postcss = require('gulp-postcss');
+const autoprefixer = require('autoprefixer');
+const cssnext = require('cssnext');
+const stylelint = require('gulp-stylelint');
+const csslint = require('gulp-csslint');
+const uncss = require('gulp-uncss');
+const csscomb = require('gulp-csscomb');
+const csso = require('gulp-csso');
+const eslint = require('gulp-eslint');
+const uglify = require('gulp-uglify');
+const pump = require('pump');
+const imagemin = require('gulp-imagemin');
+const imageminJpegtran = require('imagemin-jpegtran');
+const imageminOptipng = require('imagemin-optipng');
+const rigger = require('gulp-rigger');
+const watch = require('gulp-watch');
+const rimraf = require('rimraf');
+const browserSync = require('browser-sync').create();
 
 var path = {
 	build: {
@@ -28,6 +29,7 @@ var path = {
 		js: 'build/js/',
 		css: 'build/css/',
 		img: 'build/images/',
+		otherImages: 'build/',
 		fonts: 'build/fonts/'
 	},
 	src: {
@@ -35,6 +37,7 @@ var path = {
 		js: 'src/js/**/*.js',
 		style: 'src/scss/styles.scss',
 		img: 'src/images/**/*.*',
+		otherImages: 'src/*.+(png|jpg|jpeg|svg|gif|ico)',
 		fonts: 'src/fonts/**/*.*'
 	},
 	watch: {
@@ -42,6 +45,7 @@ var path = {
 		js: 'src/js/**/*.js',
 		style: 'src/scss/**/*.scss',
 		img: 'src/images/**/*.*',
+		otherImages: 'src/*.+(png|jpg|jpeg|svg|gif|ico)',
 		fonts: 'src/fonts/**/*.*'
 	},
 	clean: './build'
@@ -60,7 +64,6 @@ var config = {
 
 gulp.task('webserver', function () {
 	browserSync.init(config);
-
 	browserSync.watch('build/**/*.*').on('change', browserSync.reload);
 });
 
@@ -93,8 +96,8 @@ gulp.task('style:build', function () {
 		// .pipe(csslint())
 		// .pipe(csslint.formatter())
 		.pipe(postcss(postCssProcessors))
-		// .pipe(unCSS({
-			// html: [path.src.html]
+		// .pipe(uncss({
+		// 	html: [path.src.html]
 		// }))
 		.pipe(csscomb())
 		// .pipe(csso())
@@ -124,13 +127,28 @@ gulp.task('js:build', function (cb) {
 
 gulp.task('image:build', function () {
 	return gulp.src(path.src.img)
-		.pipe(imagemin({
-			progressive: true,
-			svgoPlugins: [{removeViewBox: false}],
-			use: [pngquant()],
-			interlaced: true
-		}))
+		.pipe(imagemin([
+			imagemin.jpegtran({progressive: true}),
+			imagemin.optipng({optimizationLevel: 6}),
+			imagemin.svgo({plugins: [{removeViewBox: true}]})
+		], {
+			verbose: true
+		}
+	))
 		.pipe(gulp.dest(path.build.img));
+});
+
+gulp.task('otherImages:build', function () {
+	return gulp.src(path.src.otherImages)
+		.pipe(imagemin([
+			imagemin.jpegtran({progressive: true}),
+			imagemin.optipng({optimizationLevel: 6}),
+			imagemin.svgo({plugins: [{removeViewBox: true}]})
+		], {
+			verbose: true
+		}
+	))
+		.pipe(gulp.dest(path.build.otherImages));
 });
 
 gulp.task('fonts:build', function() {
@@ -144,14 +162,18 @@ gulp.task('build', gulp.series(
 		'html:build',
 		'style:build',
 		'js:build',
-		'image:build')
+		'fonts:build',
+		'image:build',
+		'otherImages:build')
 ));
 
 gulp.task('watch', function() {
 	gulp.watch(path.watch.html, gulp.series('html:build'));
 	gulp.watch(path.watch.style, gulp.series('style:build'));
 	gulp.watch(path.watch.js, gulp.series('js:build'));
+	gulp.watch(path.watch.fonts, gulp.series('fonts:build'));
 	gulp.watch(path.watch.img, gulp.series('image:build'));
+	gulp.watch(path.watch.otherImages, gulp.series('otherImages:build'));
 });
 
 gulp.task('default', gulp.series('build', gulp.parallel('watch', 'webserver')));

@@ -1,10 +1,11 @@
 {
-  "name": "lintersgulp",
+  "name": "markupboilerplate",
   "version": "1.0.0",
   "description": "Gulp boilerplate for Frontend dev",
   "main": "index.js",
   "dependencies": {
-    "imagemin-pngquant": "^5.0.0"
+    "imagemin-jpegtran": "^5.0.2",
+    "imagemin-optipng": "^5.2.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.7",
