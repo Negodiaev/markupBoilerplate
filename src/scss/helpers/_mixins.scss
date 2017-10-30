@@ -6,6 +6,24 @@
   }
 }
 
+@function pxtoem($value, $divider: $root-font-size) {
+  @return $value / $divider * 1em;
+}
+
+@function pxtorem($value, $divider: $root-font-size) {
+  @return $value / $divider * 1rem;
+}
+
+@function lineheight($value, $divider: $root-font-size) {
+  @return $value / $divider;
+}
+
+@mixin bgfull($posLeft: 50%, $posTop: 50%) {
+  background-repeat: no-repeat;
+  background-position: $posLeft $posTop;
+  background-size: cover;
+}
+
 @mixin placeholder($color: inherit) {
   &::-webkit-input-placeholder {
     color: $color;
